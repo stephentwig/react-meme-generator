@@ -1,18 +1,31 @@
 import React from "react";
-import memesData from "../memesData.js";
 
 export default function Meme() {
   const [meme, setMeme] = React.useState({
-    topText: "WHAT DO YOU SAY TO NOT GIVING UP?",
-    bottomText: "NOT TODAY!",
+    topText: "",
+    bottomText: "",
     randomImage: "http://i.imgflip.com/1bij.jpg",
   });
 
-  const [allMemeImages, setAllMemeImages] = React.useState(memesData);
+  const [allMemeImages, setAllMemeImages] = React.useState([]);
+
+  React.useEffect(function () {
+    fetch("https://api.imgflip.com/get_memes")
+      .then((response) => response.json())
+      .then((data) => setAllMemeImages(data.data.memes));
+  }, []);
+
+  function getRandomImage() {
+    let randomNumber = Math.floor(Math.random() * allMemeImages.length);
+
+    setMeme((prevMeme) => ({
+      ...prevMeme,
+      randomImage: allMemeImages[randomNumber].url,
+    }));
+    console.log(allMemeImages[randomNumber].url, "url");
+  }
 
   function handleChange(event) {
-    console.log(meme);
-
     const { name, value, type, checked } = event.target;
     setMeme((prevData) => {
       return {
@@ -20,14 +33,6 @@ export default function Meme() {
         [name]: type === "checkbox" ? checked : value,
       };
     });
-  }
-
-  function getRandomImage() {
-    const memesArray = allMemeImages.data.memes;
-    let randomNumber = Math.floor(Math.random() * memesArray.length);
-
-    setMeme(memesArray[randomNumber].url);
-    console.log(memesArray, "url");
   }
 
   return (
