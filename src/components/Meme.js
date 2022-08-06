@@ -25,7 +25,6 @@ export default function Meme() {
   function getRandomImage() {
     const memesArray = allMemeImages.data.memes;
     let randomNumber = Math.floor(Math.random() * memesArray.length);
-    let randomImageUrl = memesArray[randomNumber].url;
 
     setMeme(memesArray[randomNumber].url);
     console.log(memesArray, "url");
@@ -54,7 +53,11 @@ export default function Meme() {
         <button className="form--button" onClick={getRandomImage}>
           Get a new meme image
         </button>
-        <img className="meme--image" src={meme.randomImage} alt="loadedImage" />
+      </div>
+      <div className="meme">
+        <img src={meme.randomImage} className="meme--image" alt="loadedImage" />
+        <h2 className="meme--text top">{meme.topText}</h2>
+        <h2 className="meme--text bottom">{meme.bottomText}</h2>
       </div>
     </main>
   );
